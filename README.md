@@ -19,8 +19,8 @@ Remarque: xQuAD peut être interpréter de manière probabiliste :$$P(d \mid q) 
 Cette algorithme est greedy(iteratif) et réalisable en 2 étapes:
 ```
 1. initialisation
-   S \fleche stocke les résultats finaux, vide au départ
-   R \fleche contient l'ensemble de document candidats 
+   S <- stocke les résultats finaux, vide au départ
+   R <- contient l'ensemble de document candidats 
 3. boucle itérative
    pour chaque document d appartenant par R
      on calcul le score xQuAD
