@@ -10,7 +10,7 @@ Sache qu'un moteur classique(e.g.BM25) retourne souvent qu'un seul aspect ce qui
 prendre en compte cette caractérique.
 
 ### formule à connaitre
-- le score pour un document: $S(d) = \text{relevance}(d,q) \cdot (\text{diversity\_part})^{w}$
+- le score pour un document: $S(d) = \text{relevance}(d,q) \cdot (\text{diversity\part})^{w}$
   - diversity part peut s'exprimer en: $$\sum_{q_i \in Q(q)} \frac{P(q_i \mid q)\, P(d \mid q_i)}{m(q_i)}$$
 - le score principal de xQuAD est donné par $$r(d, q, Q(q)) = \sum_{q_i \in Q(q)} \frac{\mathcal{I}_X(q_i, q)\, r(d, q_i)}{m(q_i)}$$
 Remarque: xQuAD peut être interpréter de manière probabiliste :$$P(d \mid q) \cdot \sum_i P(q_i \mid q)\, P(d \mid q_i)\, P(\text{novelty})$$
