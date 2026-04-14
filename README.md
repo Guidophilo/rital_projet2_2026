@@ -37,26 +37,26 @@ avec pertinence(relevance) et diversité(coverage des aspects))
 |d|document|identifiant/objet|len(d)|
 |R(q)|classement initial(init ranking)|liste de document|N|
 |S(q)|classement final(final ranking)|liste de document|t|
-|$\q_i$|sous-requêtes(sub-queries)|str/vecteur|len($\q_i$)|
+|$q_i$|sous-requêtes(sub-queries)|str/vecteur|len($q_i$)|
 |Q(q)|liste de sous-requêtes(list of sub-queries)|liste des sous-requêtes|K|
 |R(d,q)|pertinence des documents/requête|float|scalaire|
-|R(d,$\q_i$)|pertinence des documents/sous-requête|float|scalaire|
-|$\I_X(qi,q)$|importance d'aspect|float|scalaire|
-|M($\q_i$)|couverture accumulée(masse)|float|scalaire|
+|R(d,$q_i$)|pertinence des documents/sous-requête|float|scalaire|
+|$I_X(qi,q)$|importance d'aspect|float|scalaire|
+|M($q_i$)|couverture accumulée(masse)|float|scalaire|
 |$w$|poid diversité|float|scalaire|
 
 -  R(d,q) permet de décomposer terme par terme (pertinence classique (BM25/DPH))
 -  R(d,qi) permet de donner la pertinence du document pour chaque aspect(sous-requête), calculée comme une requête normale
--  $\I_X(\q_i,q)$ avec la somme = 1
+-  $I_X(q_i,q)$ avec la somme = 1
 -  M($q_i) permet de mémoriser la couverture(ou masses même notion utilisé dans le document pour simplifier la compréhension), en initialisation, on l'initialise avec des 1 pour éviter la division par 0 et à chaque itération, la mise à jour est fait avec $$M(q_i) \leftarrow M(q_i) + r(d^\*, q_i)$$
--  $1/M(\q_i)$ représent "novelty", si un aspect est déjà couvert alors il est pénalisé et si peu couvert alors on considère comme bon
+-  $1/M(q_i)$ représent "novelty", si un aspect est déjà couvert alors il est pénalisé et si peu couvert alors on considère comme bon
 -  w permet de gérer la balance relevance vs la diversité (plus il est proche de 0 plus l'algorithme s'intéresse sur la pertinence plus il est proche de 1 plus il concentre sur la diversité)
   - cas extrêmes: 0-> pure relevance 1-> forte diversité
-### 4 fonctions d'importance $\I_x$ proposé dans le papier
+### 4 fonctions d'importance $I_x$ proposé dans le papier
 |caractèristique|formule|description|avantages|limites|
 |---|-------|-----------|---------|-------|
 |Uniforme|$$\mathcal{I}_u(q_i, q) = \frac{1}{|Q(q)|}, \qquad \sum_i \mathcal{I}_u(q_i, q) = 1$$|il donne même l'importance à tous les aspects, chaque résultat a un poids=1/K, on l'utilise pour baseline|simple et robuste, pas besoin de données externes|ignore la réalité, certains aspects sont beaucoup plus fréquents que les autres|
-|Basé sur nombre de document|$$\mathcal{I}_N(q_i, q) = \frac{n(q_i)}{\sum_j n(q_j)}, où n(\q_i)=nombre de documents récupérés pour \q_i$$|plus un aspect retoune de documents plus il est important,l'idée ici est la popularité des aspects, beaucoup de documents pertinents <=> plus de chance que l'utilisateur trouve ce qu'il cherche|facile et reflète la taille d'un aspect|la présence de biais provient d'un aspect vague s'exprime aussi par la massive quantité de documents qui ne sont pas forcément pertinent(e.g recherche sur l'apple peut retourner beaucoup de document sur le fruit mais aussi l'entreprise, donc distribution est biaisée), donc il favorise le bruit et dépend fortement au système de retrieval|
+|Basé sur nombre de document|$$\mathcal{I}_N(q_i, q) = \frac{n(q_i)}{\sum_j n(q_j)}, où n(\q_i)=nombre de documents récupérés pour q_i$$|plus un aspect retoune de documents plus il est important,l'idée ici est la popularité des aspects, beaucoup de documents pertinents <=> plus de chance que l'utilisateur trouve ce qu'il cherche|facile et reflète la taille d'un aspect|la présence de biais provient d'un aspect vague s'exprime aussi par la massive quantité de documents qui ne sont pas forcément pertinent(e.g recherche sur l'apple peut retourner beaucoup de document sur le fruit mais aussi l'entreprise, donc distribution est biaisée), donc il favorise le bruit et dépend fortement au système de retrieval|
 |inspiré du resource selection(fédération de moteurs) - ReDDE|$$\mathcal{I}_R(q_i, q) = \sum_{d \,:\, r(d,q_i) > 0} r(d,q)\, r(d,q_i)\, n(q_i)$$|similaire à $\I_N$, il combine l'importance globale du document, l'importance du document par l'aspect et la taille de l'aspect. Un aspect est important si ses documents sont pertinent pour la requête et pour l'aspect, un document est bon pour q AND $\q_i$ alors boots $\q_i$|plus intelligent et combine plusieurs signaux|dépend fortement du classement initial et peu amplifier des erreurs|
 |CRCS|$$\mathcal{I}_C(q_i, q)= \frac{n(q_i)}{\max_j n(q_j)}\cdot \frac{1}{\hat{n}(q_i)}\cdot \sum_{d \,:\, r(d,q_i) > 0} (r - j(d,q)) , avec j(d,q)=range du document, t=top-k documents à retourner, \frac{1,\hat(n)(\q_i)} nombre de documents de \q_i dans top-k$$|un aspect est important si ses documents apparaissent haut dans le classement $\frac{n(\q_i),\max_j n(\q_j)}$ donne la taille relative, $\sum_{d|r(d,\q_i)>0} (r-j(d,q)) donne le score basé sur position(un document haut classé <=> score élevé), un aspect est important s'il retourne beaucoup de documents et ces documents sont bien classés$|très performant en combinant la qualité et la quantité|dépend fortment du classement initial et plus complexe que les 3 précédents|
 ### Complexité
