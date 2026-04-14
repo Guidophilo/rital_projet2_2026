@@ -13,7 +13,7 @@ prendre en compte cette caractérique.
 - le score pour un document: $S(d) = \text{relevance}(d,q) \cdot (\text{diversity part})^{w}$
   - diversity part peut s'exprimer en: $$\sum_{q_i \in Q(q)} \frac{P(q_i \mid q)\, P(d \mid q_i)}{m(q_i)}$$
 - le score principal de xQuAD est donné par $$r(d, q, Q(q)) = \sum_{q_i \in Q(q)} \frac{\mathcal{I}_X(q_i, q)\, r(d, q_i)}{m(q_i)}$$
-Remarque: xQuAD peut être interpréter de manière probabiliste :$$P(d \mid q) \cdot \sum_i P(q_i \mid q)\, P(d \mid q_i)\, P(\text{novelty})$$
+Remarque: xQuAD peut être interpréter de manière probabiliste : $$P(d \mid q) \cdot \sum_i P(q_i \mid q)\, P(d \mid q_i)\, P(\text{novelty})$$
 =>c'est une approximation d'un modèle probabilste de couverture d'intention
 ### implémentation
 Cette algorithme est greedy(iteratif) et réalisable en 2 étapes:
@@ -48,7 +48,7 @@ avec pertinence(relevance) et diversité(coverage des aspects))
 -  R(d,q) permet de décomposer terme par terme (pertinence classique (BM25/DPH))
 -  R(d,qi) permet de donner la pertinence du document pour chaque aspect(sous-requête), calculée comme une requête normale
 -  $I_X(q_i,q)$ avec la somme = 1
--  M($q_i) permet de mémoriser la couverture(ou masses même notion utilisé dans le document pour simplifier la compréhension), en initialisation, on l'initialise avec des 1 pour éviter la division par 0 et à chaque itération, la mise à jour est fait avec $$M(q_i) \leftarrow M(q_i) + r(d^\*, q_i)$$
+-  M($q_i$) permet de mémoriser la couverture(ou masses même notion utilisé dans le document pour simplifier la compréhension), en initialisation, on l'initialise avec des 1 pour éviter la division par 0 et à chaque itération, la mise à jour est fait avec $$M(q_i) \leftarrow M(q_i) + r(d^\*, q_i)$$
 -  $1/M(q_i)$ représent "novelty", si un aspect est déjà couvert alors il est pénalisé et si peu couvert alors on considère comme bon
 -  w permet de gérer la balance relevance vs la diversité (plus il est proche de 0 plus l'algorithme s'intéresse sur la pertinence plus il est proche de 1 plus il concentre sur la diversité)
   - cas extrêmes: 0-> pure relevance 1-> forte diversité
