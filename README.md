@@ -3,6 +3,8 @@
 L'objectif est la reproduction d'expérience décrit sur le papier de recherche "Explicit Search Result Diversification through Sub-Queries"
 "Explicit Search Result Diversification through Sub-Querie" (2010) propose un algorithme appelé xQuAD(explicit query aspect diversification),
 contrairement aux approches classiques(e.g MMR), il modélise explicitement (presque identique) les aspects de la sub-queries(sous-requête en fr).
+### video
+https://drive.google.com/file/d/1YhnQdFEw45ziIRX9eo_-qf2PneAOwm48/view?usp=drivesdk
 ### problème introduit
 Le problème donné ici se base sur l'ambigüité de requête et ensuite se part sur la diversité et la pertinence de la recherche: Dans la plupart des cas, une requête donnnée par l'utilisateur
 est ambiguë pour le moteur, comme par exemple "the mirror" peut être le nom d'un site de reportage journalière ou encore le nom d'un film, les résultats de la recherche sont donc diversifiés.
